@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -62,7 +96,251 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggtext)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p>Welcome to my Semester Project! For my semester project, I decided to try to figure out what is the best video game console based on a couple of different factors. These factors are number of console sales, number of software sales per console, and how many of the top-rated games are on each console. These are the factors in which I used to be able to answer this question. I had a lot of fun doing this, finding and tidying data, summarizing data, and making graphs. I did this topic because I generally wanted to know what was the best video game console of all time by not just looking at overall console sales. With the introduction out of the way, lets start off by looking at console sales.</p>
+</section>
+<section id="console-sales" class="level1">
+<h1>Console Sales</h1>
+<p>This section shows you the best selling consoles of all time. Below is a bar graph showing you what the best selling consoles of all time are.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>consolesales <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">"data/lifetimesalesofvideogameconsoles.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"Console"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Lifetime sales of video game consoles worldwide 2025</span><span class="st">`</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Sales"</span> <span class="ot">=</span> ...<span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>consolesales <span class="sc">%&gt;%</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Sales, <span class="at">y =</span> <span class="fu">fct_reorder</span>(Console, Sales))) <span class="sc">+</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"red3"</span>) <span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> <span class="fu">paste0</span>(Sales, <span class="st">" million"</span>)),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust =</span> <span class="sc">-</span><span class="fl">0.025</span>,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Best Selling Consoles"</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">plot.margin =</span> <span class="fu">margin</span>(<span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">20</span>, <span class="dv">20</span>),</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r=</span><span class="sc">-</span><span class="fl">12.5</span>), <span class="at">hjust =</span> <span class="dv">1</span>)</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_cartesian</span>(<span class="at">clip =</span> <span class="st">"off"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="videogameconsole_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, this is graph is showing the best 25 selling consoles of all time. I believe that this is a good cut of because both the last two consoles the Playstation Vita, and the Nintendo Wii U were considered massive failures by those two companies. As you can see, the Playstation 2 is the best selling console of all time selling 160.01 million units. With the Nintendo DS in second place at 154.02 million units and the Nintendo Switch in third place at 150.86 million units which is still currently being sold even though the Nintendo Switch 2 just came out. Now, if this was based on just consoles sold the best console would be the Playstation 2 but there are a couple other factors to this.</p>
+</section>
+<section id="software-sales" class="level1">
+<h1>Software Sales</h1>
+<p>I will now compare the software sales of each of the different consoles.</p>
+<section id="before-2017" class="level2">
+<h2 class="anchored" data-anchor-id="before-2017">Before 2017</h2>
+<p>You may be wondering why do you have a before 2017 section. This is because this particular dataset only had games that were released before 2017 and I still wanted to use this dataset so thats why I split this up into two sections.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>softwaresales <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data/vgsales.csv"</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>softwaresales <span class="sc">%&gt;%</span> </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> Global_Sales, <span class="at">y =</span> Platform)) <span class="sc">+</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_log10</span>(<span class="at">breaks=</span><span class="fu">c</span>(<span class="fl">1e-02</span>, <span class="fl">1e-01</span>, <span class="fl">1e+00</span>, <span class="fl">1e+01</span>, <span class="fl">1e+02</span>), <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"10,000"</span>, <span class="st">"100,000"</span>, <span class="st">"1,000,000"</span>, <span class="st">"10,000,000"</span>, <span class="st">"100,000,000"</span>)) <span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.ticks =</span> <span class="fu">element_line</span>(),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.line =</span> <span class="fu">element_line</span>()</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Console"</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Global Sales"</span>,</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Distribution of Sales per Game for Each Console"</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Data from 2017"</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="videogameconsole_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, here is a graph that represents all of the games on each console’s sales. Since, some of the games have way more sales than a lot of the games I decided to scale using log 10 on the x axis. For example, the Nintendo Wii, as you can see, has a game that sold a lot more copies than most of the other games which I am pretty sure is Wii Sports. As you can see, though there are a lot of consoles that have means higher than the other ones. I think this could be because of the amount of games that each console has. For example, the Atari 2600 has the highest mean, however, it seems that there may have not been as many games on that console compared to other ones. This seems to be apparent with the Wii U as well. However, looking at the top 25 consoles on this graph the Playstation 3, SNES, Xbox 360, Nintendo 64, and Gameboy have higher means than the others. This could mean that these consoles had better software sales than other consoles.</p>
+</section>
+<section id="after-2017" class="level2">
+<h2 class="anchored" data-anchor-id="after-2017">After 2017</h2>
+<p>After 2017, is split up into two graphs because Sony and Nintendo had exact software units sold while Xbox only had revenue of software.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>switchsoftwaresales <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">"data/nintendoswitchsoftware.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"FYear"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Nintendo Switch software unit sales 2017-2025</span><span class="st">`</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">"SoftwareSales"</span> <span class="ot">=</span> ...<span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">doubledigityear =</span> <span class="fu">str_extract</span>(FYear, <span class="at">pattern =</span> <span class="st">"[:digit:]+"</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">FiscalYear =</span> <span class="fu">paste0</span>(<span class="st">"FY 20"</span>, doubledigityear),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">Console =</span> <span class="st">"Switch"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(FiscalYear, SoftwareSales, Console)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>playstationsoftware <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">"data/sony-playstation-software-sales-2018-2024.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"FiscalYear"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Sony PlayStation full-game and first party software unit sales 2018-2024</span><span class="st">`</span>, <span class="st">"SoftwareSales"</span> <span class="ot">=</span> ...<span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">Console =</span> <span class="st">"PS4/PS5"</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(FiscalYear, SoftwareSales, Console)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>currentsoftware <span class="ot">&lt;-</span> <span class="fu">rbind</span>(switchsoftwaresales, playstationsoftware) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">SoftwareSales =</span> <span class="fu">as.numeric</span>(SoftwareSales))</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>currentsoftware <span class="sc">%&gt;%</span> </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> FiscalYear, <span class="at">y =</span> SoftwareSales, <span class="at">color =</span> Console, <span class="at">group =</span> Console)) <span class="sc">+</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="st">"FY 2021"</span>) <span class="sc">+</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="st">"FY 2021"</span>, <span class="at">y =</span> <span class="dv">100</span>, <span class="at">label =</span> <span class="st">"PS5 Released"</span>), <span class="at">color=</span><span class="st">"black"</span>, <span class="at">angle=</span><span class="dv">90</span>, <span class="at">vjust =</span> <span class="fl">1.2</span>, <span class="at">text=</span><span class="fu">element_text</span>(<span class="at">size=</span><span class="dv">11</span>)) <span class="sc">+</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"#006FCD"</span>, <span class="st">"#E60012"</span>)) <span class="sc">+</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Fiscal Year"</span>,</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Sales in millions"</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Switch and Playstation (PS4 and PS5) Software Sales for Each Fiscal Year"</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="videogameconsole_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, this graph compares the Nintendo Switch to the Playstation 4 and Playstation 5 in software sales. As you can see, overall the Playstation 4 and 5 has better software sales than the Nintendo Switch. I think this may be because people only bought a Nintendo Switch to play first party games rather than third party games. While people bought a PS4 and PS5 to play both first party and third party games because those consoles are more powerful than a Nintendo Switch. So the Switch is a great place to play first party games but not a great way to play third party games. Comparing this to the PS4 mean in the first graph I think that this means that in software sales I think that the Nintendo Switch did worse than the PS4 in terms of software sales.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>xboxsoftware <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/xbox-software-sales.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"year"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Xbox gaming software sales revenues worldwide 2012-2025, by type</span><span class="st">`</span>,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">"retail"</span> <span class="ot">=</span> ...<span class="dv">2</span>,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>         <span class="st">"online"</span> <span class="ot">=</span> ...<span class="dv">3</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year =</span> <span class="fu">as.numeric</span>(<span class="fu">str_extract</span>(year, <span class="st">"[:digit:]+"</span>)),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>         <span class="at">retail =</span> <span class="fu">as.numeric</span>(retail),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>         <span class="at">online =</span> <span class="fu">as.numeric</span>(online),</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">overall =</span> retail <span class="sc">+</span> online) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(year <span class="sc">&gt;=</span> <span class="dv">2017</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">4</span>, <span class="at">names_to =</span> <span class="st">"sales_type"</span>, <span class="at">values_to =</span> <span class="st">"sales"</span>)</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>xboxsoftware <span class="sc">%&gt;%</span> </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> year, <span class="at">y =</span> sales, <span class="at">color =</span> sales_type, <span class="at">group =</span> sales_type)) <span class="sc">+</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="fu">aes</span>(<span class="at">xintercept =</span> <span class="fl">2020.9166667</span>)) <span class="sc">+</span></span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">x=</span> <span class="fl">2020.9166667</span>, <span class="at">y=</span><span class="dv">6000</span>, <span class="at">label =</span> <span class="st">"Xbox Series X/S Released"</span>), <span class="at">angle =</span> <span class="dv">90</span>, <span class="at">vjust=</span><span class="fl">1.2</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>    <span class="at">y=</span><span class="st">"Revenue in million U.S. dollars"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">x=</span><span class="st">"Year"</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Revenue for Xbox Software for Each Year 2017-2025 Including Sales Type"</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Sales Type"</span></span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="videogameconsole_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, this graph shows the revenue of Xbox software for each sales type which are retail, online, and the overall sales. I think that Xbox only provides information for revenue because Xbox within these years created Game Pass which means that people don’t buy the game they rather pay for a subscription to play particular games. This is why I think that it is more based off of revenue. From looking at the graph Xbox has shown a lot more revenue over the years so I think that the software sales for the Xbox Series X/S are much better than a lot of the other consoles because of the amount they have made because of Game Pass.</p>
+</section>
+</section>
+<section id="top-rated-games" class="level1">
+<h1>Top Rated Games</h1>
+<p>The next graph shows how many games each console has that are in the top 20 rated games on Metacritic which is a review website the reviews things like video games, movies, music and more. I think that this is a big factor because the better the games a console has the better that console would be.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>bestsellingswitch <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">"data/topsellingnintendoswitchgames.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">rename</span>(<span class="st">"Name"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Top selling Nintendo Switch games worldwide 2025</span><span class="st">`</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Global_Sales"</span> <span class="ot">=</span> ...<span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"Platform"</span> <span class="ot">=</span> <span class="st">"Switch"</span>,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Publisher"</span> <span class="ot">=</span> <span class="st">"Nintendo"</span>,</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Rank"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Genre"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Year"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>         <span class="st">"NA_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>         <span class="st">"EU_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>         <span class="st">"JP_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Other_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>topratedvideogames <span class="ot">&lt;-</span> <span class="fu">read_xlsx</span>(<span class="st">"data/topratedvideogamesofalltime.xlsx"</span>, <span class="at">sheet =</span> <span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="st">"gameyear"</span> <span class="ot">=</span> <span class="st">`</span><span class="at">Top-rated video games of all time 2025</span><span class="st">`</span>,</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>         <span class="st">"rating"</span> <span class="ot">=</span> ...<span class="dv">2</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="at">splitstring =</span> <span class="fu">str_split_fixed</span>(gameyear, <span class="at">pattern =</span> <span class="st">" </span><span class="sc">\\</span><span class="st">("</span>, <span class="dv">2</span>),</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    <span class="at">game =</span> splitstring[,<span class="dv">1</span>],</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">year =</span> <span class="fu">str_extract</span>(splitstring[,<span class="dv">2</span>], <span class="at">pattern =</span> <span class="st">"[:digit:]+"</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span><span class="fu">c</span>(splitstring, gameyear))</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>gtavrdd2plat <span class="ot">&lt;-</span> <span class="fu">read_excel</span>(<span class="st">"data/gtavandrdd2platforms.xlsx"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="st">"Publisher"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Rank"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Genre"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Year"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>         <span class="st">"NA_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>         <span class="st">"EU_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>         <span class="st">"JP_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Global_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>,</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>         <span class="st">"Other_Sales"</span> <span class="ot">=</span> <span class="cn">NA</span>)</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>softsalessw <span class="ot">&lt;-</span> <span class="fu">rbind</span>(softwaresales, bestsellingswitch, gtavrdd2plat)</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>jointoprated <span class="ot">&lt;-</span> topratedvideogames <span class="sc">%&gt;%</span> </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(softsalessw, <span class="fu">join_by</span>(game <span class="sc">==</span> Name))</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>consoletopratedgames <span class="ot">&lt;-</span> jointoprated <span class="sc">%&gt;%</span> </span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Platform) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">numberoftopratedgames =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>()</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>consoletopratedgames <span class="sc">%&gt;%</span> </span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>numberoftopratedgames, <span class="at">y=</span><span class="fu">fct_reorder</span>(Platform, numberoftopratedgames))) <span class="sc">+</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>(<span class="at">fill =</span> <span class="st">"blue"</span>) <span class="sc">+</span></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_text</span>(<span class="fu">aes</span>(<span class="at">label =</span> numberoftopratedgames),</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>            <span class="at">hjust =</span> <span class="dv">0</span>,</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>            <span class="at">size =</span> <span class="dv">4</span>) <span class="sc">+</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Number of Top 20 Rated on Metacritic Games For Each Console"</span></span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.title =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>    <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">margin =</span> <span class="fu">margin</span>(<span class="at">r=</span><span class="sc">-</span><span class="fl">12.5</span>), <span class="at">hjust =</span> <span class="dv">1</span>)</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="videogameconsole_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As you can see, the PC has the most top 20 rated games, however, the PC is not a console so we will ignore that. If you are going for consoles though, the PS3 and the N64 have the highest number of top 20 rated games at 4 games with the Xbox, Xbox 360, Wii, PS2, and Gamecube being next at 3 games. As you can see, there are some consoles that do not have any of the highest rated games such as the Gameboy.</p>
+</section>
+<section id="final-analysis" class="level1">
+<h1>Final Analysis</h1>
+<p>I think that looking at the graphs overall the best console might be the Playstation 3. This is because it is the 8th best selling console of all time, it has a great mean of sales on each of the games and it also has 4 games that are on the list for the top 20 rated games so it has pretty enjoyable games. It is not the Gameboy because although it is pretty high in console sales and software sales it does not have any games that are in the top 20. I guess you can also debate that the Playstation 2 is the best console of all time because it has a relatively high mean for software sales, it has 3 of the top 20 rated games, and it is the best selling console of all time, but depending on the data I think that it is the Playstation 3. However, in the end, I do think it depends on the factors that you are using to find out what is the best video game console.</p>
+</section>
 
 </main>
 <!-- /main column -->

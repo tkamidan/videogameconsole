@@ -5,13 +5,17 @@ format:
     keep-md: true
 ---
 
-```{r}
-#| message: false
-#| warning: false
+
+::: {.cell}
+
+```{.r .cell-code}
 library(tidyverse)
 library(readxl)
 library(ggtext)
 ```
+:::
+
+
 
 # Introduction
 
@@ -21,9 +25,11 @@ Welcome to my Semester Project! For my semester project, I decided to try to fig
 
 This section shows you the best selling consoles of all time. Below is a bar graph showing you what the best selling consoles of all time are.
 
-```{r}
-#| message: false
-#| warning: false
+
+
+::: {.cell}
+
+```{.r .cell-code}
 consolesales <- read_xlsx("data/lifetimesalesofvideogameconsoles.xlsx", sheet = 2) %>% 
   rename("Console" = `Lifetime sales of video game consoles worldwide 2025`,
          "Sales" = ...2) %>% 
@@ -47,8 +53,14 @@ consolesales %>%
     axis.text.y = element_text(margin = margin(r=-12.5), hjust = 1)
   ) +
   coord_cartesian(clip = "off")
-  
 ```
+
+::: {.cell-output-display}
+![](videogameconsole_files/figure-html/unnamed-chunk-2-1.png){width=672}
+:::
+:::
+
+
 
 As you can see, this is graph is showing the best 25 selling consoles of all time. I believe that this is a good cut of because both the last two consoles the Playstation Vita, and the Nintendo Wii U were considered massive failures by those two companies. As you can see, the Playstation 2 is the best selling console of all time selling 160.01 million units. With the Nintendo DS in second place at 154.02 million units and the Nintendo Switch in third place at 150.86 million units which is still currently being sold even though the Nintendo Switch 2 just came out. Now, if this was based on just consoles sold the best console would be the Playstation 2 but there are a couple other factors to this.
 
@@ -60,9 +72,11 @@ I will now compare the software sales of each of the different consoles.
 
 You may be wondering why do you have a before 2017 section. This is because this particular dataset only had games that were released before 2017 and I still wanted to use this dataset so thats why I split this up into two sections.
 
-```{r}
-#| message: false
-#| warning: false
+
+
+::: {.cell}
+
+```{.r .cell-code}
 softwaresales <- read_csv("data/vgsales.csv")
 
 softwaresales %>% 
@@ -83,15 +97,24 @@ softwaresales %>%
   )
 ```
 
+::: {.cell-output-display}
+![](videogameconsole_files/figure-html/unnamed-chunk-3-1.png){width=672}
+:::
+:::
+
+
+
 As you can see, here is a graph that represents all of the games on each console's sales. Since, some of the games have way more sales than a lot of the games I decided to scale using log 10 on the x axis. For example, the Nintendo Wii, as you can see, has a game that sold a lot more copies than most of the other games which I am pretty sure is Wii Sports. As you can see, though there are a lot of consoles that have means higher than the other ones. I think this could be because of the amount of games that each console has. For example, the Atari 2600 has the highest mean, however, it seems that there may have not been as many games on that console compared to other ones. This seems to be apparent with the Wii U as well. However, looking at the top 25 consoles on this graph the Playstation 3, SNES, Xbox 360, Nintendo 64, and Gameboy have higher means than the others. This could mean that these consoles had better software sales than other consoles. 
 
 ## After 2017
 
 After 2017, is split up into two graphs because Sony and Nintendo had exact software units sold while Xbox only had revenue of software. 
 
-```{r}
-#| message: false
-#| warning: false
+
+
+::: {.cell}
+
+```{.r .cell-code}
 switchsoftwaresales <- read_xlsx("data/nintendoswitchsoftware.xlsx", sheet = 2) %>% 
   rename("FYear" = `Nintendo Switch software unit sales 2017-2025`,
          "SoftwareSales" = ...2) %>% 
@@ -126,11 +149,20 @@ currentsoftware %>%
   theme_minimal()
 ```
 
+::: {.cell-output-display}
+![](videogameconsole_files/figure-html/unnamed-chunk-4-1.png){width=672}
+:::
+:::
+
+
+
 As you can see, this graph compares the Nintendo Switch to the Playstation 4 and Playstation 5 in software sales. As you can see, overall the Playstation 4 and 5 has better software sales than the Nintendo Switch. I think this may be because people only bought a Nintendo Switch to play first party games rather than third party games. While people bought a PS4 and PS5 to play both first party and third party games because those consoles are more powerful than a Nintendo Switch. So the Switch is a great place to play first party games but not a great way to play third party games. Comparing this to the PS4 mean in the first graph I think that this means that in software sales I think that the Nintendo Switch did worse than the PS4 in terms of software sales.
 
-```{r}
-#| message: false
-#| warning: false
+
+
+::: {.cell}
+
+```{.r .cell-code}
 xboxsoftware <- read_excel("data/xbox-software-sales.xlsx", sheet = 2) %>% 
   rename("year" = `Xbox gaming software sales revenues worldwide 2012-2025, by type`,
          "retail" = ...2,
@@ -156,8 +188,14 @@ xboxsoftware %>%
     color = "Sales Type"
   ) +
   theme_minimal()
-
 ```
+
+::: {.cell-output-display}
+![](videogameconsole_files/figure-html/unnamed-chunk-5-1.png){width=672}
+:::
+:::
+
+
 
 As you can see, this graph shows the revenue of Xbox software for each sales type which are retail, online, and the overall sales. I think that Xbox only provides information for revenue because Xbox within these years created Game Pass which means that people don't buy the game they rather pay for a subscription to play particular games. This is why I think that it is more based off of revenue. From looking at the graph Xbox has shown a lot more revenue over the years so I think that the software sales for the Xbox Series X/S are much better than a lot of the other consoles because of the amount they have made because of Game Pass.
 
@@ -165,10 +203,11 @@ As you can see, this graph shows the revenue of Xbox software for each sales typ
 
 The next graph shows how many games each console has that are in the top 20 rated games on Metacritic which is a review website the reviews things like video games, movies, music and more. I think that this is a big factor because the better the games a console has the better that console would be.
 
-```{r}
-#| message: false
-#| warning: false
 
+
+::: {.cell}
+
+```{.r .cell-code}
 bestsellingswitch <- read_xlsx("data/topsellingnintendoswitchgames.xlsx", sheet = 2) %>% 
    rename("Name" = `Top selling Nintendo Switch games worldwide 2025`,
          "Global_Sales" = ...2) %>% 
@@ -233,8 +272,14 @@ consoletopratedgames %>%
     axis.text.x = element_blank(),
     axis.text.y = element_text(margin = margin(r=-12.5), hjust = 1)
   )
-  
 ```
+
+::: {.cell-output-display}
+![](videogameconsole_files/figure-html/unnamed-chunk-6-1.png){width=672}
+:::
+:::
+
+
 
 As you can see, the PC has the most top 20 rated games, however, the PC is not a console so we will ignore that. If you are going for consoles though, the PS3 and the N64 have the highest number of top 20 rated games at 4 games with the Xbox, Xbox 360, Wii, PS2, and Gamecube being next at 3 games. As you can see, there are some consoles that do not have any of the highest rated games such as the Gameboy.
 
