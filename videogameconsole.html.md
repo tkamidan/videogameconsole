@@ -42,7 +42,7 @@ consolesales %>%
             hjust = -0.025,
             size = 3) +
   labs(
-    title = "Best Selling Consoles"
+    title = "Best Selling Consoles through May 2025"
   ) +
   theme_minimal() +
   theme(
@@ -62,7 +62,7 @@ consolesales %>%
 
 
 
-As you can see, this is graph is showing the best 25 selling consoles of all time. I believe that this is a good cut of because both the last two consoles the Playstation Vita, and the Nintendo Wii U were considered massive failures by those two companies. As you can see, the Playstation 2 is the best selling console of all time selling 160.01 million units. With the Nintendo DS in second place at 154.02 million units and the Nintendo Switch in third place at 150.86 million units which is still currently being sold even though the Nintendo Switch 2 just came out. Now, if this was based on just consoles sold the best console would be the Playstation 2 but there are a couple other factors to this.
+As you can see, this is graph is showing the best 25 selling consoles of all time. I believe that this is a good cut off   because both the last two consoles the Playstation Vita, and the Nintendo Wii U were considered massive failures by those two companies. As you can see, the Playstation 2 is the best selling console of all time selling 160.01 million units. With the Nintendo DS in second place at 154.02 million units and the Nintendo Switch in third place at 150.86 million units which is still currently being sold even though the Nintendo Switch 2 just came out. Now, if this was based on just consoles sold the best console would be the Playstation 2 but there are a couple other factors to this.
 
 # Software Sales
 
@@ -82,7 +82,7 @@ softwaresales <- read_csv("data/vgsales.csv")
 softwaresales %>% 
   ggplot(aes(x = Global_Sales, y = Platform)) +
   geom_boxplot() +
-  geom_point() +
+  geom_point(color = "lightgray") +
   scale_x_log10(breaks=c(1e-02, 1e-01, 1e+00, 1e+01, 1e+02), labels = c("10,000", "100,000", "1,000,000", "10,000,000", "100,000,000")) +
   theme_minimal() +
   theme(
@@ -143,7 +143,7 @@ currentsoftware %>%
   scale_color_manual(values = c("#006FCD", "#E60012")) +
   labs(
     x = "Fiscal Year",
-    y = "Sales in millions",
+    y = "Sales in millions of copies",
     title = "Switch and Playstation (PS4 and PS5) Software Sales for Each Fiscal Year"
   ) +
   theme_minimal()
@@ -263,7 +263,8 @@ consoletopratedgames %>%
             hjust = 0,
             size = 4) +
   labs(
-    title = "Number of Top 20 Rated on Metacritic Games For Each Console"
+    title = "Number of Top 20 Rated on Metacritic Games For Each Console",
+    caption = "Some games are cross-platform"
   ) +
   theme_minimal() +
   theme(
